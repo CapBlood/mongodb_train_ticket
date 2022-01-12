@@ -9,16 +9,16 @@ public class Train implements Serializable {
 
     private String id;
     private String date;
-    private String id_route;
+    private String route;
 
 
     public Train() {
     }
 
-    public Train(String id, String data, String id_route) {
+    public Train(String id, String data, String route) {
         this.id = id;
         this.date = date;
-        this.id_route = id_route;
+        this.route = route;
     }
 
     public String getId() {
@@ -37,11 +37,11 @@ public class Train implements Serializable {
         this.date = date;
     }
 
-    public String getId_route() {
-        return id_route;
+    public String getRoute() {
+        return route;
     }
 
-    public void setId_route(String id_route) {
-        this.id_route = id_route;
+    public void setRoute(String route) {
+        this.route = route;
     }
 }

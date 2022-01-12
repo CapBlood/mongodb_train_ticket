@@ -5,27 +5,33 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import ru.mai.dep810.demoapp.model.Train;
+import ru.mai.dep810.demoapp.model.Station;
 
 @Repository
-class MongoTrainRepository implements TrainRepository {
+public
+class MongoStationRepository implements StationRepository {
 
-    public static final String COLLECTION_NAME = "train";
+    public static final String COLLECTION_NAME = "station";
 
     private final MongoTemplate mongoTemplate;
 
-    public MongoTrainRepository(MongoTemplate mongoTemplate) {
+    public MongoStationRepository(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
     @Override
-    public Train findById(String id) {
-        return mongoTemplate.findById(id, Train.class, COLLECTION_NAME);
+    public List<Station> findAll() {
+        return mongoTemplate.findAll(Station.class, COLLECTION_NAME);
     }
 
     @Override
-    public Train save(Train train) {
-        return mongoTemplate.save(train, COLLECTION_NAME);
+    public Station findById(String id) {
+        return mongoTemplate.findById(id, Station.class, COLLECTION_NAME);
+    }
+
+    @Override
+    public Station save(Station station) {
+        return mongoTemplate.save(station, COLLECTION_NAME);
     }
 
     @Override

@@ -30,13 +30,13 @@ public class DemoAppApplication {
     @Bean
     HazelcastInstance hazelcastInstance() {
         Config cfg = new Config().addMapConfig(
-                new MapConfig("train")
+                new MapConfig("station")
                         .setEvictionConfig(
                                 new EvictionConfig()
                                         .setEvictionPolicy(EvictionPolicy.LRU)
                                         .setMaxSizePolicy(MaxSizePolicy.PER_NODE)
                                         .setSize(1000))
-                        .setNearCacheConfig(new NearCacheConfig("train-near-cache"))
+                        .setNearCacheConfig(new NearCacheConfig("station-near-cache"))
         );
         return Hazelcast.newHazelcastInstance(cfg);
     }
