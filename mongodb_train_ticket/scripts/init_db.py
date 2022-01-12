@@ -19,7 +19,7 @@ config_path = root_path / "configs" / "scripts.ini"
 config = configparser.ConfigParser()
 config.read(config_path.resolve())
 
-client = MongoClient()
+client = MongoClient(replicaset='rs0')
 name = config["Init"]["name_db"]
 db = client[name]
 
