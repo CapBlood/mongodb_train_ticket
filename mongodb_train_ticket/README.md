@@ -1,5 +1,3 @@
-# Оглавление
-
 ## Установка MongoDB
 ```shell
 brew install mongodb-community@5.0
@@ -45,7 +43,7 @@ rs.initiate( {
 ./clean_db.py & ./init_db.py 
 ```
 
-### Шардинг
+## Шардинг
 После заполнения данными активируем шардинг (в `mongosh`):
 
 [comment]: <> (```shell)
