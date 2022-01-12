@@ -10,7 +10,7 @@ import ru.mai.dep810.demoapp.model.Train;
 @Repository
 class MongoTrainRepository implements TrainRepository {
 
-    public static final String COLLECTION_NAME = "student";
+    public static final String COLLECTION_NAME = "train";
 
     private final MongoTemplate mongoTemplate;
 
