@@ -20,7 +20,7 @@ config = configparser.ConfigParser()
 config.read(config_path.resolve())
 
 # client = MongoClient(replicaset='rs1')
-client = MongoClient('localhost', 27023)
+client = MongoClient('localhost', 27017)
 name = config["Init"]["name_db"]
 db = client[name]
 
