@@ -1,10 +1,7 @@
 package ru.mai.dep810.demoapp.repository;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -13,42 +10,55 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Repository;
+import ru.mai.dep810.demoapp.model.Route;
 import ru.mai.dep810.demoapp.model.Ticket;
+import ru.mai.dep810.demoapp.model.Train;
 
 @Repository
-public class TrainTicketElasticRepository {
+public class TicketElasticRepository {
 
     private final RestHighLevelClient client;
 
-    public TrainTicketElasticRepository(RestHighLevelClient client) {
+    public TicketElasticRepository(RestHighLevelClient client) {
         this.client = client;
     }
 
-    public List<Ticket> fullTextSearch(String query) {
-        SearchSourceBuilder builder = new SearchSourceBuilder().query(QueryBuilders.simpleQueryStringQuery(query));
-        SearchRequest request = new SearchRequest("train_test").source(builder);
+    public List<Ticket> fullTextSearch(String id) {
+        List<Ticket> tickets;
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.must(
+                QueryBuilders.queryStringQuery("bought: false and " + id).defaultField("*")
+                        .analyzeWildcard(true));
+        builder = builder.query(boolQueryBuilder);
+
+        SearchRequest request = new SearchRequest("train_test.ticket").source(builder);
         try {
             SearchHit[] hits = client.search(request, RequestOptions.DEFAULT).getHits().getHits();
-            return Arrays.stream(hits)
+            tickets = Arrays.stream(hits)
                     .map(hit -> toModelObject(hit.getId(), hit.getSourceAsMap()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+
+        return tickets;
     }
 
-    public Ticket addToIndex(Ticket ticket) {
-        IndexRequest indexRequest = new IndexRequest("train_test").id(ticket.getId()).source(toMap(ticket));
+    public Ticket addToIndex(Ticket train) {
+        IndexRequest indexRequest = new IndexRequest("train_test.ticket").id(train.getId()).source(toMap(train));
         try {
             IndexResponse response = client.index(indexRequest, RequestOptions.DEFAULT);
             if (response.status().getStatus() != 201) {
                 throw new RuntimeException("Index failed with status = " + response.status().getStatus());
             }
-            return findById(ticket.getId());
+            return findById(train.getId());
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -57,7 +67,7 @@ public class TrainTicketElasticRepository {
     public Ticket findById(String id) {
         GetResponse getResponse = null;
         try {
-            getResponse = client.get(new GetRequest("train_test", id), RequestOptions.DEFAULT);
+            getResponse = client.get(new GetRequest("train_test.ticket", id), RequestOptions.DEFAULT);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -67,8 +77,8 @@ public class TrainTicketElasticRepository {
     private Map<String, Object> toMap(Ticket ticket) {
         final Map<String, Object> map = new HashMap<>();
         map.put("Id", ticket.getId());
-        map.put("Bought", ticket.getBought());
-        map.put("Train", ticket.getTrain());
+        map.put("bought", ticket.getBought());
+        map.put("train", ticket.getTrain());
         return map;
     }
 

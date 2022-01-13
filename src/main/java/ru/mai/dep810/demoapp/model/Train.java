@@ -15,7 +15,7 @@ public class Train implements Serializable {
     public Train() {
     }
 
-    public Train(String id, String data, String route) {
+    public Train(String id, String date, String route) {
         this.id = id;
         this.date = date;
         this.route = route;

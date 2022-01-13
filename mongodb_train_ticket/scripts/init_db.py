@@ -9,7 +9,8 @@ import datetime
 from pymongo import MongoClient
 
 
-FORMAT_DATE = '%d/%m/%y'
+FORMAT_DATE = '%Y-%m-%d'
+# "yyyy-MM-dd"
 
 # TODO:
 # Написать try-except для config.
@@ -231,7 +232,7 @@ def create_db():
         routes = generate_routes(stations_path.resolve())
         init_collection_routes(routes)
         l_routes = list(db["route"].find())
-        trains = generate_trains(l_routes, "20/03/25")
+        trains = generate_trains(l_routes, "2025-03-20")
         init_collection_train(trains)
         l_trains = list(db["train"].find())
         tickets = generate_tickets(l_trains)
