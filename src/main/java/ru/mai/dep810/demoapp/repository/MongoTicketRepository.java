@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import ru.mai.dep810.demoapp.model.Station;
 import ru.mai.dep810.demoapp.model.Ticket;
 
 @Repository

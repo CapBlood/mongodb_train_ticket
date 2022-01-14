@@ -1,10 +1,5 @@
 package ru.mai.dep810.demoapp.repository;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -16,22 +11,25 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.script.Script;
-import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import ru.mai.dep810.demoapp.model.Route;
 import ru.mai.dep810.demoapp.model.Ticket;
-import ru.mai.dep810.demoapp.model.Train;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class TicketElasticRepository {
 
     private final RestHighLevelClient client;
 
-    public TicketElasticRepository(RestHighLevelClient client) {
+    public TicketElasticRepository(@Qualifier("elasticsearchClient") RestHighLevelClient client) {
         this.client = client;
     }
 
@@ -86,7 +84,7 @@ public class TicketElasticRepository {
     }
 
     public Ticket findById(String id) {
-        GetResponse getResponse = null;
+        GetResponse getResponse;
         try {
             getResponse = client.get(new GetRequest("train_test.ticket", id), RequestOptions.DEFAULT);
         } catch (IOException e) {

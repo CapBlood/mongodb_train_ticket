@@ -14,7 +14,7 @@ public class HazelcastCachedStationRepository implements StationRepository {
     private final IMap<String, Station> cache;
 
     public HazelcastCachedStationRepository(@Qualifier("mongoStationRepository") StationRepository delegate,
-                                            @Autowired HazelcastInstance hazelcastInstance) {
+                                            @Qualifier("hazelcastInstance") @Autowired HazelcastInstance hazelcastInstance) {
         this.cache = hazelcastInstance.getMap("station");
         this.delegate = delegate;
     }

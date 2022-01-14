@@ -3,12 +3,10 @@ package ru.mai.dep810.demoapp.repository;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import ru.mai.dep810.demoapp.model.Station;
 import ru.mai.dep810.demoapp.model.Ticket;
 
 @Repository
@@ -19,7 +17,7 @@ public class HazelcastCachedTicketRepository implements TicketRepository  {
 
     public HazelcastCachedTicketRepository(@Qualifier("ticketElasticRepository") TicketElasticRepository delegate,
                                            @Qualifier("mongoTicketRepository") TicketRepository delegateMongo,
-                                           @Autowired HazelcastInstance hazelcastInstance) {
+                                           @Qualifier("hazelcastInstance") @Autowired HazelcastInstance hazelcastInstance) {
         this.cache = hazelcastInstance.getMap("ticket");
         this.delegate = delegate;
         this.delegateMongo = delegateMongo;

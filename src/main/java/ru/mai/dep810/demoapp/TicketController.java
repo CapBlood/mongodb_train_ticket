@@ -1,25 +1,20 @@
 package ru.mai.dep810.demoapp;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-//import ru.mai.dep810.demoapp.repository.PostElasticRepository;
-import ru.mai.dep810.demoapp.model.Station;
 import ru.mai.dep810.demoapp.model.Ticket;
-import ru.mai.dep810.demoapp.model.Train;
 import ru.mai.dep810.demoapp.repository.HazelcastCachedTicketRepository;
-import ru.mai.dep810.demoapp.repository.StationRepository;
-import ru.mai.dep810.demoapp.repository.TicketElasticRepository;
-import ru.mai.dep810.demoapp.repository.TrainElasticRepository;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
+
 
 @RestController
 public class TicketController {
 
-    private HazelcastCachedTicketRepository hazelcastCachedTicketRepository;
+    private final HazelcastCachedTicketRepository hazelcastCachedTicketRepository;
 
     public TicketController(@Qualifier("hazelcastCachedTicketRepository") HazelcastCachedTicketRepository hazelcastCachedTicketRepository) {
         this.hazelcastCachedTicketRepository = hazelcastCachedTicketRepository;
@@ -32,14 +27,14 @@ public class TicketController {
     }
 
     @GetMapping("/ticket/{id}")
-    @ApiIgnore
+    @ApiOperation("Покупка билета по id")
     public Ticket getTicketById(@PathVariable("id") String id) {
         return hazelcastCachedTicketRepository.findById(id);
     }
 
     @GetMapping("/ticket/pay/{id}")
-    @ApiIgnore
-    public void pay(@PathVariable("id") String id) {
+    @ApiOperation("Покупка билета по id")
+    public void pay(@PathVariable("id") @Parameter(description = "id билета для покупки") String id) {
         hazelcastCachedTicketRepository.pay(id);
     }
 

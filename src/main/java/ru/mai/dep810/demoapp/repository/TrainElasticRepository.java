@@ -1,8 +1,5 @@
 package ru.mai.dep810.demoapp.repository;
 
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -14,17 +11,21 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.mai.dep810.demoapp.model.Route;
-import ru.mai.dep810.demoapp.model.Ticket;
 import ru.mai.dep810.demoapp.model.Train;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class TrainElasticRepository {
 
     private final RestHighLevelClient client;
 
-    public TrainElasticRepository(RestHighLevelClient client) {
+    public TrainElasticRepository(@Qualifier("elasticsearchClient") RestHighLevelClient client) {
         this.client = client;
     }
 
@@ -51,7 +52,7 @@ public class TrainElasticRepository {
             SearchHit[] hits = client.search(request, RequestOptions.DEFAULT).getHits().getHits();
             routes = Arrays.stream(hits)
                     .map(hit -> toRouteModelObject(hit.getId(), hit.getSourceAsMap()))
-                    .map(route -> route.getId())
+                    .map(Route::getId)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -96,7 +97,7 @@ public class TrainElasticRepository {
     }
 
     public Train findById(String id) {
-        GetResponse getResponse = null;
+        GetResponse getResponse;
         try {
             getResponse = client.get(new GetRequest("train_test.train", id), RequestOptions.DEFAULT);
         } catch (IOException e) {
