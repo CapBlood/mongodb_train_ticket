@@ -9,16 +9,16 @@ public class Ticket implements Serializable {
 
     private String id;
     private boolean bought;
-    private String id_train;
+    private String train;
 
 
     public Ticket() {
     }
 
-    public Ticket(String id, boolean bought, String id_train) {
+    public Ticket(String id, boolean bought, String train) {
         this.id = id;
         this.bought = bought;
-        this.id_train = id_train;
+        this.train = train;
     }
 
     public String getId() {
@@ -37,11 +37,11 @@ public class Ticket implements Serializable {
         this.bought = bought;
     }
 
-    public String getId_train() {
-        return id_train;
+    public String getTrain() {
+        return train;
     }
 
-    public void setId_train(String id_train) {
-        this.id_train = id_train;
+    public void setTrain(String id_train) {
+        this.train = id_train;
     }
 }

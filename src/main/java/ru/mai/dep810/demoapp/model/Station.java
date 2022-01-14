@@ -1,6 +1,10 @@
 package ru.mai.dep810.demoapp.model;
 
-public class Station {
+import java.io.Serializable;
+
+public class Station implements Serializable {
+
+    private static final long serialVersionUID = -2511130773997181001L;
     private String id;
     private String name;
 
