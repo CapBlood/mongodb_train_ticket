@@ -1,12 +1,16 @@
 ## Установка MongoDB
 ```shell
+brew tap mongodb/brew
+```
+
+```shell script
 brew install mongodb-community@5.0
 ```
 
 ## Запуск MongoDB
 
 Создаем первый набор реплик:
-```shell
+```shell script
 mkdir -p ~/mongod_db/n1/ ~/mongod_db/n2/ ~/mongod_db/n3/
 ```
 
